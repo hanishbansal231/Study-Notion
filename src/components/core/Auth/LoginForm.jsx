@@ -16,7 +16,7 @@ function LoginForm() {
   function handleOnChange(e){
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: [e.target.value],
+      [e.target.name]: e.target.value,
     }))
   }
   function handleOnSubmit(e){

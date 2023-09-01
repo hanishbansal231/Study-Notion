@@ -49,7 +49,6 @@ function SignupForm() {
       ...formData,
       accountType,
     }
-    console.log(signupData);
 
     // Setting signup data to state
     // To be used after otp verification
