@@ -7,7 +7,10 @@ import Error from './pages/Error';
 import ForgotPassword from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
 import VerifyEmail from './pages/VerifyEmail';
+import DashBoard from './pages/DashBoard';
+import About from './pages/About';
 import Navbar from "./components/common/Navbar";
+import MyProfile from "./components/core/Dashboard/MyProfile";
 function App() {
 
   return (
@@ -20,6 +23,10 @@ function App() {
       <Route path="/forgot-password" element={< ForgotPassword/>}/>
       <Route path="/update-password/:id" element={< UpdatePassword/>}/>
       <Route path="/verify-email" element={< VerifyEmail/>}/>
+      <Route path="/about" element={< About/>}/>
+      <Route path="/dashboard" element={< DashBoard />}>
+      <Route path="/dashboard/my-profile" element={< MyProfile/>}/>
+      </Route>
       <Route path="*" element={< Error/>}/>
     </Routes>
   </div>

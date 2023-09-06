@@ -22,7 +22,7 @@ function Navbar() {
     //         link: "/catalog/web-development"
     //     }
     // ]
-    const { Token } = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.profile);
     const { totalItems } = useSelector((state) => state.cart);
     const location = useLocation();
@@ -85,7 +85,7 @@ function Navbar() {
                     {
                         user && user?.accountType !== "Instructor" && (
                             <Link to={"/dashboard/cart"} className='relative'>
-                                <AiOutlineShoppingCart />
+                                <AiOutlineShoppingCart className='text-richblack-25 text-2xl' />
                                 {
                                     totalItems > 0 && (
                                         <span>{totalItems}</span>
@@ -95,21 +95,21 @@ function Navbar() {
                         )
                     }
                     {
-                        Token === null && (
+                        token === null && (
                             <Link to={"/login"}>
                                 <button className='border border-richblack-700 bg-richblack-800 px-[15px] py-[5px] text-richblack-100 rounded-md'>Log in</button>
                             </Link>
                         )
                     }
                     {
-                        Token === null && (
+                        token === null && (
                             <Link to={"/signup"}>
                                 <button className='border border-richblack-700 bg-richblack-800 px-[15px] py-[5px] text-richblack-100 rounded-md'>sign up</button>
                             </Link>
                         )
                     }
                     {
-                        Token !== null && <ProfileDropDown />
+                        token !== null && <ProfileDropDown />
                     }
                 </div>
             </div>

@@ -97,8 +97,8 @@ export function login(email,password,navigate){
             ? response.data.user.image
             : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`
             dispatch(setUser({ ...response.data.user, image: userImage }));
-            localStorage.setItem("token", JSON.stringify(response.data.token))
-            localStorage.setItem("user", JSON.stringify(response.data.user))
+            localStorage.setItem("token", JSON.stringify(response.data.user.token));
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             navigate("/dashboard/my-profile")
         }catch(error){
             console.log("LOGIN API ERROR............", error)
@@ -109,6 +109,19 @@ export function login(email,password,navigate){
     }
 }
 
+export function logout(navigate) {
+    return (dispatch) => {
+      dispatch(setToken(null))
+      dispatch(setUser(null))
+    //   dispatch(resetCart())
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+      toast.success("Logged Out")
+      navigate("/")
+    }
+  }
+  
+  
 export function getPasswordResetToken(email,setEmailSend){
     return async(dispatch) => {
         const toastId = toast.loading("Loading...");
@@ -131,7 +144,7 @@ export function getPasswordResetToken(email,setEmailSend){
         toast.dismiss(toastId);
     }
 }
-export function resetPassword(password,confirmPassword,token){
+export function resetPassword(password,confirmPassword,token,navigate){
     return async(dispatch) => {
         dispatch(setLoading(true));
         try{
@@ -145,6 +158,7 @@ export function resetPassword(password,confirmPassword,token){
                 throw new Error(response.data.message);
             }
             toast.success("Password Reset Successfully...");
+            navigate("/login");
         }catch(error){
             console.log(`Reset Password Token Error....${error}`);
             toast.error("Unable To Reset Password....");
