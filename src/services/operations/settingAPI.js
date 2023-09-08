@@ -57,7 +57,7 @@ export function updateProfile(token, formData, navigate) {
               dispatch(
                 setUser({ ...response.data.updatedUserDetails})
               )
-              navigate("/dashbaoard/myprofile");
+              navigate("dashboard/myprofile");
               toast.success("Profile Updated Successfully")
         }catch(error){
             console.log("UPDATE_PROFILE_API API ERROR............", error.message)

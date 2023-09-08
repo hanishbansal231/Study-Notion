@@ -42,7 +42,7 @@ function Navbar() {
         return matchPath({ path: route }, location.pathname);
     }
     return (
-        <div className='flex h-14 items-center justify-center border-b-[1px] border-b-richblack-900'>
+        <div className='flex h-14 items-center justify-center border-b-[1px] border-b-richblack-600'>
             <div className='flex w-11/12 max-w-maxContent items-center justify-between'>
                 <Link to={"/"}><img src={logo} alt='mainLogo' width={160} height={42} loading='lazy' /></Link>
                 <nav>

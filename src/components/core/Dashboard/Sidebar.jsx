@@ -13,7 +13,7 @@ function Sidebar() {
     const { loading: authLoading } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [confirmationModal,setConfirmationModal] = useState(null);
+    const [confirmationModal, setConfirmationModal] = useState(null);
     if (profileLoading || authLoading) {
         return (
             <div className='mt-10'>
@@ -22,8 +22,8 @@ function Sidebar() {
         )
     }
     return (
-        <div className='text-white fixed'>
-            <div className='flex min-w-[222px] flex-col border-r-[1px] border-r-richblack-300 min-h-[calc(100vh-3.5rem)]'>
+        <>
+            <div className='pt-4 text-white flex min-w-[222px] flex-col border-r-[1px] border-r-richblack-300 min-h-[calc(100vh-3.5rem)]'>
                 <div className='flex flex-col'>
                     {
                         sidebarLinks.map((link) => {
@@ -35,7 +35,7 @@ function Sidebar() {
                     }
                 </div>
                 <div className='mx-auto mt-6 mb-6 h-[1px] w-11/12 bg-richblack-600'></div>
-                <div>
+                <div className='flex min-w-[222px] flex-col border-r-[1px] border-r-richblack-300 min-h-[calc(100vh-3.5rem)]'>
                     <SidebarLink link={{ name: "Setting", path: "/dashboard/settings" }} iconName={"VscSettingsGear"} />
                     <button onClick={() => setConfirmationModal({
                         text1: "Are You Sure?",
@@ -44,16 +44,17 @@ function Sidebar() {
                         btn2text: "Cancel",
                         btn1Handler: () => dispatch(logout(navigate)),
                         btn2Handler: () => setConfirmationModal(null),
-                    })} className='text-sm font-medium text-richblack-300 '>
-                        <div className='flex items-center gap-x-2'>
-                            <VscSignOut className='text-lg' />
-                            <span>Logout</span>
+                    })} className='text-sm font-medium text-richblack-300 ml-8 mt-2'>
+                        <div className='flex gap-6 items-center'>
+                            <VscSignOut className='text-lg text-white' />
+                            <span className='text-white'>Logout</span>
                         </div>
                     </button>
+
                 </div>
             </div>
             {confirmationModal && <ComfirmationModal modalData={confirmationModal} />}
-        </div>
+        </>
     )
 }
 
