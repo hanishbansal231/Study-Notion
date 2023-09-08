@@ -23,7 +23,7 @@ function ProfileDropDown() {
        (
          <div ref={ref} onClick={(e) => e.stopPropagation()} className='absolute bg-richblack-800 border-richblack-700 overflow-hidden rounded-md border-[1px] top-[130%] right-0 z-[1000] divide-y-[1px] divide-richblack-700'>
 
-         <Link to="/dashboard/my-profile">
+         <Link to="/dashboard/myprofile" onClick={() => setOpen(false)}>
            <div className='flex items-center gap-2 w-full  hover:bg-richblack-700 hover:text-richblack-25" p-3 px-10'>
              <VscDashboard className="text-lg" />
              Dashboard

@@ -22,7 +22,7 @@ function Sidebar() {
         )
     }
     return (
-        <div>
+        <div className='text-white fixed'>
             <div className='flex min-w-[222px] flex-col border-r-[1px] border-r-richblack-300 min-h-[calc(100vh-3.5rem)]'>
                 <div className='flex flex-col'>
                     {
@@ -36,7 +36,7 @@ function Sidebar() {
                 </div>
                 <div className='mx-auto mt-6 mb-6 h-[1px] w-11/12 bg-richblack-600'></div>
                 <div>
-                    <SidebarLink link={{ name: "Setting", path: "dashboard/settings" }} iconName="VscSettingsGear" />
+                    <SidebarLink link={{ name: "Setting", path: "/dashboard/settings" }} iconName={"VscSettingsGear"} />
                     <button onClick={() => setConfirmationModal({
                         text1: "Are You Sure?",
                         text2: "You will be logged out of your account",
