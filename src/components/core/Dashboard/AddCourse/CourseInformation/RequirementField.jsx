@@ -8,16 +8,16 @@ function RequirementField({ name, label, register, setValue, errors, getValues }
     useEffect(() => {
         register(name,{
             required:true,
-            validate: (value) => value.length > 0
+            // validate: (value) => value.length > 0
         })
     },[]);
-    // useEffect(() => {
-    //      setValue(name,requirementList);
-    // },[requirementList]);
+    useEffect(() => {
+         setValue(name,requirementList);
+    },[requirementList]);
     const handleAddRequirement = () => {
         if (requirement) {
             setRequirementList([...requirementList, requirement])
-            setRequirement("");
+            // setRequirement("");
         }
     }
     const handleRemoveRequirement = (index) => {
@@ -27,14 +27,14 @@ function RequirementField({ name, label, register, setValue, errors, getValues }
     }
     return (
         <div>
-            <label htmlFor={name}>{label}<sup>*</sup></label>
+            <label className="text-sm text-richblack-5" htmlFor={name}>{label}<sup className="text-pink-200">*</sup></label>
             <div>
                 <input
                     type="text"
                     id={name}
                     value={requirement}
                     onChange={(e) => setRequirement(e.target.value)}
-                    className='w-full text-black'
+                    className="form-style w-full"
                 />
                 <button type='button' onClick={handleAddRequirement} className='font-semibold text-yellow-50'>Add</button>
             </div>
@@ -54,7 +54,7 @@ function RequirementField({ name, label, register, setValue, errors, getValues }
             }
             {
                 errors[name] && (
-                    <span>{label} is Required</span>
+                    <span  className="ml-2 text-xs tracking-wide text-pink-200">{label} is Required</span>
                 )
             }
         </div>

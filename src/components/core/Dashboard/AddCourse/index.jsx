@@ -3,7 +3,7 @@ import RenderSteps from './RenderSteps';
 function AddCourse() {
     return (
         <>
-            <div className='text-white'>
+            <div>
                 <div>
                     <h2>Add Course</h2>
                     <div>

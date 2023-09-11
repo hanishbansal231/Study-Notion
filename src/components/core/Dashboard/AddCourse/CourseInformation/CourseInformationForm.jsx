@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { HiOutlineCurrencyRupee } from "react-icons/hi"
-import { fetchCourseCategories } from '../../../../../services/operations/courseDetailsAPI';
+import { fetchCourseCategories, addCourseDetails } from '../../../../../services/operations/courseDetailsAPI';
 import RequirementField from './RequirementField';
 import { setCourse, setStep } from '../../../../../slices/courseSlice';
 import IconBtn from '../../../../common/IconBtn'
+import ChipInput from './ChipInput';
+import Upload from '../Upload';
 import toast from 'react-hot-toast';
 function CourseInformationForm() {
   const {
@@ -38,7 +40,7 @@ function CourseInformationForm() {
           setValue("courseTags", course.courseTag);
           setValue("courseBenefits", course.whatYouWillLearn);
           setValue("courseCategory", course.category);
-          setValue("courseRequirement", course.instruction);
+          setValue("courseRequirement", course.instructions);
           setValue("courseImage", course.thumbnail);
         }
       } catch (error) {
@@ -48,17 +50,18 @@ function CourseInformationForm() {
     }
     getCategories();
   }, []);
+
   const isFormUpdate = () => {
     const currentValue = getValues();
     if (
       currentValue.courseTitle !== course.courseName ||
       currentValue.courseShortDesc !== course.courseDescription ||
       currentValue.coursePrice !== course.coursePrice ||
-      // currentValue.courseTags.toString() !== course.courseTag.toString() ||
+      currentValue.courseTags.toString() !== course.courseTag.toString() ||
       currentValue.courseBenefits !== course.whatYouWillLearn ||
       currentValue.courseCategory._id !== course.category._id ||
-      // currentValue.courseImage !== course.thumbnail ||
-      currentValue.courseRequirement.toString() !== course.instruction.toString()
+      currentValue.courseImage !== course.thumbnail ||
+      currentValue.courseRequirement.toString() !== course.instructions.toString()
     ) {
       return true;
     } else {
@@ -66,108 +69,115 @@ function CourseInformationForm() {
     }
   }
   const onSubmit = async (data) => {
+
     if (editCourse) {
+    
       if (isFormUpdate()) {
-        const currentValue = getValues();
-        const formData = new FormData();
-        formData.append("courseId", course._id);
-        if (currentValue.courseTitle !== course.courseName) {
+        const currentValues = getValues()
+        const formData = new FormData()
+        // console.log(data)
+        formData.append("courseId", course._id)
+        if (currentValues.courseTitle !== course.courseName) {
           formData.append("courseName", data.courseTitle)
         }
-        if (currentValue.courseShortDesc !== course.courseDescription) {
-          formData.append("courseDescription", data.courseTitle)
+        if (currentValues.courseShortDesc !== course.courseDescription) {
+          formData.append("courseDescription", data.courseShortDesc)
         }
-        if (currentValue.coursePrice !== course.coursePrice) {
+        if (currentValues.coursePrice !== course.price) {
           formData.append("price", data.coursePrice)
         }
-        // if(currentValue.courseTags !== course.courseTag){
-        //   formData.append("courseTag",data.courseTags)
-        // }
-        if (currentValue.courseBenefits !== course.whatYouWillLearn) {
+        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.courseTags))
+        }
+        if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatYouWillLearn", data.courseBenefits)
         }
-        if (currentValue.courseCategory._id !== course.category._id) {
-          formData.append("category", data.courseCategory)
+        if (currentValues.courseCategory._id !== course.category._id) {
+          formData.append("category", data.courseCategory_.id)
         }
-        // if (currentValue.courseImage !== course.thumbnail) {
-        //   formData.append("thumbnail", data.courseImage)
-        // }
-        if (currentValue.courseRequirement.toString() !== course.instruction.toString()) {
-          formData.append("instruction", JSON.stringify(data.courseRequirement))
+        if (
+          currentValues.courseRequirements.toString() !==
+          course.instructions.toString()
+        ) {
+          formData.append(
+            "instructions",
+            JSON.stringify(data.courseRequirements)
+          )
         }
-        setLoading(true);
-        try {
-          const result = 0;
-          // const result = await editCourseDetails(formData, token);
-          if (result) {
-            setStep(2);
-            dispatch(setCourse(result));
-          }
-        } catch (error) {
-          console.log(error);
+        if (currentValues.courseImage !== course.thumbnail) {
+          formData.append("thumbnailImage", data.courseImage)
         }
-        setLoading(false);
-      }else{
-        toast.error("No Changes Made So Far");
+        // console.log("Edit Form data: ", formData)
+        setLoading(true)
+        // const result = await editCourseDetails(formData, token)
+        const result = false;
+        setLoading(false)
+        if (result) {
+          dispatch(setStep(2))
+          dispatch(setCourse(result))
+        }
+      } else {
+        toast.error("No changes made to the form")
       }
-      return;
+      return
     }
-    const formData = new FormData();
-    formData.append("courseName",data.courseTitle);
-    formData.append("courseDescription",data.courseShortDesc);
-    formData.append("price",data.coursePrice);
-    formData.append("whatYouWillLearn",data.courseBenefits);
-    formData.append("category",data.courseCategory);
-    formData.append("instruction",data.JSON.stringify(data.courseRequirement));
-    formData.append("courseName",data.courseTitle);
-    formData.append("courseName",data.courseTitle);
-    // formData.append("status",COURSE_STATUS.DRAFT);
-    setLoading(true);
-    const result = 0;
-    // const result = await addCourseDetails(formData,token);
-    if(result){
-      setStep(2);
-      dispatch(setCourse(result));
+
+    const formData = new FormData()
+    formData.append("courseName", data.courseTitle)
+    formData.append("courseDescription", data.courseShortDesc)
+    formData.append("price", data.coursePrice)
+    formData.append("tag", JSON.stringify(data.CourseTags))
+    formData.append("whatYouWillLearn", data.courseBenefits)
+    formData.append("category", data.courseCategory)
+    // formData.append("status", COURSE_STATUS.DRAFT)
+    formData.append("instructions", JSON.stringify(data.courseRequirements))
+    formData.append("thumbnailImage", data.courseImage.path)
+    console.log("thumbnailImage -> ", data.courseImage.path);
+    setLoading(true)
+    const result = await addCourseDetails(formData, token)
+    if (result) {
+      dispatch(setStep(2))
+      dispatch(setCourse(result))
     }
-    setLoading(false);
+    setLoading(false)
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='rounded-md border-richblack-700 bg-richblack-800 p-6 space-y-8'>
       <div>
-        <label htmlFor='courseTitle'>Course Title<sup>*</sup></label>
-        <input id='courseTitle' placeholder='Enter Course Title' {...register("courseTitle", { required: true })} className='w-full' />
+        <label className="text-sm text-richblack-5" htmlFor='courseTitle'>Course Title<sup className="text-pink-200">*</sup></label>
+        <input className="form-style w-full" id='courseTitle' placeholder='Enter Course Title' {...register("courseTitle", { required: true })} />
         {
           errors.courseTitle && (
-            <span>Course Title is Required</span>
+            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Title is Required</span>
           )
         }
       </div>
       <div>
-        <label htmlFor='courseShortDesc'>Course Short Description<sup>*</sup></label>
-        <textarea className='min-h-[140px] w-full' id="courseShortDesc" placeholder='Enter Description' {...register("courseShortDesc", { required: true })}></textarea>
+        <label className="text-sm text-richblack-5" htmlFor='courseShortDesc'>Course Short Description<sup className="text-pink-200">*</sup></label>
+        <textarea   className="form-style resize-x-none min-h-[130px] w-full" id="courseShortDesc" placeholder='Enter Description' {...register("courseShortDesc", { required: true })}></textarea>
         {
           errors.courseShortDesc && (
-            <span>Course Description is Required </span>
+            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Description is Required </span>
           )
         }
       </div>
       <div className='relative'>
-        <label htmlFor='coursePrice'>Course Price<sup>*</sup></label>
-        <input id='coursePrice' placeholder='Enter Course Price' {...register("coursePrice", { required: true, valueAsNumber: true, })} className='w-full' />
-        <HiOutlineCurrencyRupee className='absolute top-1/2 text-richblack-400' />
+        <label className="text-sm text-richblack-5" htmlFor='coursePrice'>Course Price<sup className="text-pink-200">*</sup></label>
+        <input id='coursePrice' placeholder='Enter Course Price' {...register("coursePrice", { required: true, valueAsNumber: true, })}    className="form-style w-full !pl-10" />
+        <HiOutlineCurrencyRupee className="absolute left-3 top-[57px] inline-block -translate-y-1/2 text-2xl text-richblack-400" />
         {
           errors.coursePrice && (
-            <span>Course Price is Required</span>
+            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Price is Required</span>
           )
         }
       </div>
       <div>
-        <label htmlFor='courseCategory'>Course Category<sup>*</sup></label>
-        <select className='w-full text-black' id='courseCategory' defaultValue="" {...register("courseCategory", { required: true })}>
+        <label className="text-sm text-richblack-5" htmlFor='courseCategory'>Course Category<sup className="text-pink-200">*</sup></label>
+        <select className="form-style w-full" id='courseCategory' defaultValue="" {...register("courseCategory", { required: true })}>
           <option value="" disabled>Choose A Category</option>
           {
             !loading && courseCategory.map((category, index) => (
-              <option key={index} value={category?.id}>
+              <option key={index} value={category?._id}>
                 {
                   category?.name
                 }
@@ -177,11 +187,11 @@ function CourseInformationForm() {
         </select>
         {
           errors.courseCategory && (
-            <span>Course Category is Required</span>
+            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Category is Required</span>
           )
         }
       </div>
-      {/* <ChipInput 
+      <ChipInput 
       label={"Tags"}
       name="CouseTags"
       placeholder="Enter tags and press enter"
@@ -189,25 +199,26 @@ function CourseInformationForm() {
       errors={errors}
       getValues={getValues}
       setValue={setValue}
-      /> */}
-      {/* <Upload 
-      name=""
-      label=""
-      register={register}
-      setValue={setValue}
-      errors={errors}
-      /> */}
+      />
+      <Upload 
+       name="courseImage"
+       label="Course Thumbnail"
+       register={register}
+       setValue={setValue}
+       errors={errors}
+       editData={editCourse ? course?.thumbnail : null}
+      />
       <div>
-        <label htmlFor="coursebenifits">Benefits of the course<sup>*</sup></label>
+        <label className="text-sm text-richblack-5" htmlFor="coursebenifits">Benefits of the course<sup className="text-pink-200">*</sup></label>
         <textarea
           id='coursebenifits'
           placeholder='Enter benefits of the course'
           {...register("courseBenefits", { required: true })}
-          className='min-h-[130px] w-full'
+          className="form-style resize-x-none min-h-[130px] w-full"
         />
         {
           errors.courseBenefits && (
-            <span>Course Benefits is Required</span>
+            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Benefits is Required</span>
           )
         }
       </div>
