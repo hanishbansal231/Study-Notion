@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { createSection,updateSection } from '../../../../../services/operations/courseDetailsAPI';
 import NestedView from './NestedView';
 function CourseBuilderForm() {
-  const { token } = useSelector((state) => state.auth);
+  const {token} = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const disptach = useDispatch();
   const { course } = useSelector((state) => state.course);
@@ -41,7 +41,7 @@ function CourseBuilderForm() {
   }
   const onSubmit = async (data) => {
     setLoading(true);
-    let result;
+    let result = null;
     if (editSectionName) {
       result = await updateSection(
         {
@@ -62,6 +62,7 @@ function CourseBuilderForm() {
       setEditSectionName(null);
       setValue("sectionName", "");
     }
+    console.log(result);
   }
   const handleChangeEditSectionName = (sectionId,sectionName) =>{
    if(editSectionName === sectionId){
@@ -71,6 +72,7 @@ function CourseBuilderForm() {
    setEditSectionName(sectionId);
    setValue("sectionName",sectionName);
   }
+  console.log(course);
   return (
     <div className='text-white'>
       <h2>Course Builder</h2>
@@ -85,7 +87,7 @@ function CourseBuilderForm() {
           }
         </div>
         <div className='mt-10 flex gap-x-5'>
-          <IconBtn type="Submit" text={editSectionName ? "Edit Section Name" : "Create Course"} outline={true} customClasses={"text-white"} >
+          <IconBtn type="submit" text={editSectionName ? "Edit Section Name" : "Create Course"} outline={true} customClasses={"text-white"} >
             <BsPlusCircle className='text-yellow-50' />
           </IconBtn>
           {
@@ -102,7 +104,7 @@ function CourseBuilderForm() {
           <NestedView handleChangeEditSectionName={handleChangeEditSectionName} />
         )
       }
-      <div className='flex justify-end gap-x-3'>
+      <div className='flex justify-end gap-x-3 mt-10'>
         <button onClick={goToBack}>Back</button>
         <IconBtn text={"Next"} onClick={goToNext}><BiRightArrow /></IconBtn>
       </div>
