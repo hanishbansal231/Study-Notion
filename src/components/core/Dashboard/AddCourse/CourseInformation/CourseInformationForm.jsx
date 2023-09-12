@@ -20,7 +20,7 @@ function CourseInformationForm() {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
+  const {token} = useSelector((state) => state.auth);
   const { course, editCourse } = useSelector((state) => state.course);
   const [loading, setLoading] = useState(false);
   const [courseCategory, setCourseCategory] = useState([]);
@@ -131,10 +131,10 @@ function CourseInformationForm() {
     formData.append("category", data.courseCategory)
     // formData.append("status", COURSE_STATUS.DRAFT)
     formData.append("instructions", JSON.stringify(data.courseRequirements))
-    formData.append("thumbnailImage", data.courseImage.path)
-    console.log("thumbnailImage -> ", data.courseImage.path);
+    formData.append("thumbnailImage", data.courseImage)
     setLoading(true)
     const result = await addCourseDetails(formData, token)
+    console.log("TOKEN CHECK ->",token);
     if (result) {
       dispatch(setStep(2))
       dispatch(setCourse(result))
