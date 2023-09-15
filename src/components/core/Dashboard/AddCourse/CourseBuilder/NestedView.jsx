@@ -6,6 +6,8 @@ import { MdEdit } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { BiSolidDownArrow } from 'react-icons/bi';
 import { AiOutlinePlus } from 'react-icons/ai';
+import ComfirmationModal from '../../../../common/ComfirmationModal'
+import SubSectionModal from './SubSectionModal';
 function NestedView({ handleChangeEditSectionName }) {
     const { course } = useSelector((state) => state.course);
     const { token } = useSelector((state) => state.auth);
@@ -14,7 +16,9 @@ function NestedView({ handleChangeEditSectionName }) {
     const [viewSubSection, setViewSubSection] = useState(null);
     const [editSubSection, setEditSubSection] = useState(null);
     const [comfirmationModal, setComfirmationModal] = useState(null);
-    const handleDeleteSection = (sectionId) => { }
+    const handleDeleteSection = (sectionId) => { 
+        console.log("Delete...");
+    }
     const handleDeleteSubSection = (subSectionId, sectionId) => { }
     return (
         <div className='mt-10'>
@@ -29,7 +33,7 @@ function NestedView({ handleChangeEditSectionName }) {
                                 </div>
                                 <div className='flex items-center gap-x-3'>
                                     <button
-                                        // onClick={handleChangeEditSectionName(section._id, section.sectionName)}
+                                        onClick={() => handleChangeEditSectionName(section._id, section.sectionName)}
                                         className='flex items-center gap-x-3'
                                     >
                                         <MdEdit />
@@ -38,8 +42,8 @@ function NestedView({ handleChangeEditSectionName }) {
                                         setComfirmationModal({
                                             text1: "Delete this Section",
                                             text2: "All the lectures in this section will be deleted",
-                                            btn1: "Delete",
-                                            btn2: "Cancle",
+                                            btn1text: "Delete",
+                                            btn2text: "Cancle",
                                             btn1Handler: () => handleDeleteSection(section._id),
                                             btn2Handler: () => setComfirmationModal(null),
                                         })
@@ -68,9 +72,9 @@ function NestedView({ handleChangeEditSectionName }) {
                                                     setComfirmationModal({
                                                         text1: "Delete this Section",
                                                         text2: "All the lectures in this section will be deleted",
-                                                        btn1: "Delete",
-                                                        btn2: "Cancle",
-                                                        btn1Handler: () => handleDeleteSubSection(data._id,section._id),
+                                                        btn1text: "Delete",
+                                                        btn2text: "Cancle",
+                                                        btn1Handler: () => handleDeleteSubSection(data._id, section._id),
                                                         btn2Handler: () => setComfirmationModal(null),
                                                     })
                                                 }}>
@@ -80,9 +84,9 @@ function NestedView({ handleChangeEditSectionName }) {
                                         </div>
                                     ))
                                 }
-                                <button 
-                                onClick={() => setAddSubSection(section._id)}
-                                className='mt-4 flex items-center gap-x-2 text-yellow-50'
+                                <button
+                                    onClick={() => setAddSubSection(section._id)}
+                                    className='mt-4 flex items-center gap-x-2 text-yellow-50'
                                 >
                                     <AiOutlinePlus />
                                     <p>Add Lecture</p>
@@ -92,6 +96,33 @@ function NestedView({ handleChangeEditSectionName }) {
                     ))
                 }
             </div>
+            {
+                addSubSection
+                    ? (<SubSectionModal
+                        modalData={addSubSection}
+                        setModalData={setAddSubSection}
+                        add={true}
+                    />)
+                    : viewSubSection
+                        ? (<SubSectionModal
+                            modalData={viewSubSection}
+                            setModalData={setViewSubSection}
+                            view={true}
+                        />)
+                        : editSubSection
+                            ? (<SubSectionModal
+                                modalData={editSubSection}
+                                setModalData={setEditSubSection}
+                                edit={true}
+                            />)
+                            : (<div></div>)
+            }
+            {
+                comfirmationModal 
+                ? (<ComfirmationModal modalData={comfirmationModal
+                } />)
+                : (<div></div>)
+            }
         </div>
     )
 }

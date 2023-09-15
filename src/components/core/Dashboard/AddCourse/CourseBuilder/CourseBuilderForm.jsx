@@ -78,8 +78,8 @@ function CourseBuilderForm() {
       <h2>Course Builder</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="sectionName">Section name <sup>*</sup></label>
-          <input className='w-full' type='text' id='sectionName' placeholder='Add Section Name' {...register("sectionName", { required: true })} />
+          <label className="text-sm text-richblack-5" htmlFor="sectionName">Section name <sup className="text-pink-200">*</sup></label>
+          <input className="form-style w-full" type='text' id='sectionName' placeholder='Add Section Name' {...register("sectionName", { required: true })} />
           {
             errors.sectionName && (
               <span>Section Name is Required</span>
