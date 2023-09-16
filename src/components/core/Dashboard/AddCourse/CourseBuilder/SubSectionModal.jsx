@@ -8,6 +8,7 @@ import { setCourse } from '../../../../../slices/courseSlice';
 import { RxCross1 } from 'react-icons/rx';
 import Upload from '../Upload';
 import IconBtn from '../../../../common/IconBtn';
+import {createSubSection,updateSubSection} from '../../../../../services/operations/courseDetailsAPI';
 function SubSectionModal({
   modalData,
   setModalData,
@@ -56,10 +57,13 @@ function SubSectionModal({
       formData.append("vedio", data.lectureVedio);
     }
     setLoading(true);
-    // const result = await updateSubSection(formData, token);
-    // if (result) {
-    //   dispatch(setCourse(result));
-    // }
+    const result = await updateSubSection(formData, token);
+    console.log(result);
+    if (result) {
+      const updateCourseContent = course.courseContent.map((section) => section._id ===  modalData.sectionId ? result : section);
+      const updateCourse = {...course,courseContent:updateCourseContent};
+      dispatch(setCourse(updateCourse));
+    }
     setModalData(null);
     setLoading(false);
   }
@@ -71,7 +75,7 @@ function SubSectionModal({
       if (!isFormUpdated) {
         toast.error("No Changes made to the form");
       } else {
-        handleEditSubSection();
+        handleEditSubSection(data);
       }
       return;
     }
@@ -81,13 +85,16 @@ function SubSectionModal({
     formData.append("description", data.lectureDesc);
     formData.append("vedio", data.lectureVedio);
     setLoading(true);
-    // const result = await createSubSection(formData, token);
-    // if (result) {
-    //   dispatch(setCourse(result));
-    // }
+    const result = await createSubSection(formData, token);
+    if (result) {
+      const updateCourseContent = course.courseContent.map((section) => section._id ===  modalData ? result : section);
+      const updateCourse = {...course,courseContent:updateCourseContent};
+      dispatch(setCourse(updateCourse));
+    }
     setModalData(null);
     setLoading(false);
   }
+  console.log(modalData);
   return (
     <div>
       <div>
@@ -105,8 +112,8 @@ function SubSectionModal({
             errors={errors}
             setValue={setValue}
             video={true}
-            viewData={view ? modalData.videoUrl : null}
-            editData={edit ? modalData.videoUrl : null}
+            viewData={view ? modalData.vedioUrl : null}
+            editData={edit ? modalData.vedioUrl : null}
           />
           <div>
             <label htmlFor="lectureTitle">Lecture Title</label>

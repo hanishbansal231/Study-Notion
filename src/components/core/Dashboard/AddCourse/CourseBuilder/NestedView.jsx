@@ -8,18 +8,33 @@ import { BiSolidDownArrow } from 'react-icons/bi';
 import { AiOutlinePlus } from 'react-icons/ai';
 import ComfirmationModal from '../../../../common/ComfirmationModal'
 import SubSectionModal from './SubSectionModal';
+import { setCourse } from '../../../../../slices/courseSlice';
+import {deleteSection,deleteSubSection} from '../../../../../services/operations/courseDetailsAPI';
 function NestedView({ handleChangeEditSectionName }) {
     const { course } = useSelector((state) => state.course);
+    console.log("Course -> ",course);
     const { token } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [addSubSection, setAddSubSection] = useState(null);
     const [viewSubSection, setViewSubSection] = useState(null);
     const [editSubSection, setEditSubSection] = useState(null);
     const [comfirmationModal, setComfirmationModal] = useState(null);
-    const handleDeleteSection = (sectionId) => { 
-        console.log("Delete...");
+    const handleDeleteSection = async (sectionId) => { 
+        const result = await deleteSection({sectionId,courseId:course._id},token);
+        if(result){
+            dispatch(setCourse(result));
+        }
+        
     }
-    const handleDeleteSubSection = (subSectionId, sectionId) => { }
+    const handleDeleteSubSection = async (subSectionId, sectionId) => { 
+        const result = await deleteSubSection({subSectionId,sectionId},token);
+        if(result){
+            const updateCourseContent = course.courseContent.map((section) => section._id === sectionId ? result : section);
+            const updateCourse = {...course,courseContent:updateCourseContent};
+            dispatch(setCourse(updateCourse));
+        }
+        setComfirmationModal(null);
+    }
     return (
         <div className='mt-10'>
             <div className='rounded-md bg-richblack-700 p-6 px-8'>
@@ -62,7 +77,7 @@ function NestedView({ handleChangeEditSectionName }) {
                                                 <RxDropdownMenu />
                                                 <p>{data.title}</p>
                                             </div>
-                                            <div className='flex items-center gap-x-3'>
+                                            <div className='flex items-center gap-x-3' onClick={(e) => e.stopPropagation()}>
                                                 <button
                                                     onClick={() => setEditSubSection({ ...data, sectionId: section._id })}
                                                 >
