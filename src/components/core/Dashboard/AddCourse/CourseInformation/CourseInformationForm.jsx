@@ -11,6 +11,7 @@ import IconBtn from '../../../../common/IconBtn'
 import ChipInput from './ChipInput';
 import Upload from '../Upload';
 import toast from 'react-hot-toast';
+import { COURSE_STATUS } from "../../../../../utils/constants"
 function CourseInformationForm() {
   const {
     register,
@@ -121,17 +122,17 @@ function CourseInformationForm() {
       }
       return
     }
-
     const formData = new FormData()
     formData.append("courseName", data.courseTitle)
     formData.append("courseDescription", data.courseShortDesc)
     formData.append("price", data.coursePrice)
-    formData.append("tag", JSON.stringify(data.CourseTags))
+    formData.append("tag", JSON.stringify(data.CouseTags))
     formData.append("whatYouWillLearn", data.courseBenefits)
     formData.append("category", data.courseCategory)
-    // formData.append("status", COURSE_STATUS.DRAFT)
-    formData.append("instructions", JSON.stringify(data.courseRequirements))
+    formData.append("status", COURSE_STATUS.DRAFT)
+    formData.append("instructions", JSON.stringify(data.courseRequirement))
     formData.append("thumbnailImage", data.courseImage)
+    console.log("Data -> ",data);
     setLoading(true)
     const result = await addCourseDetails(formData, token)
     console.log("TOKEN CHECK ->",token);

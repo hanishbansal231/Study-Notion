@@ -203,3 +203,44 @@ export async function updateSubSection(data,token){
   toast.dismiss(toastId);
   return result;
 }
+
+export async function editCourseDetail(data,token){
+  let result = null;
+  const toastId = toast.loading("Loading...");
+  try{
+    const response = await apiConnector("POST",EDIT_COURSE_API,data,{
+      Authorization: `Bearer ${token}`
+    });
+    console.log("EDIT COURSE API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Update Course Details")
+    }
+    toast.success("Course Details Updated Successfully")
+    result = response?.data?.data
+  }catch(error){
+    console.log("EDIT COURSE API ERROR............", error)
+    toast.error(error.message)
+  }
+  toast.dismiss(toastId);
+  return result;
+}
+
+export async function fetchInstructorCourses(token){
+  const toastId = toast.loading("Loading...");
+  let result = [];
+  try{
+    const response = await apiConnector("GET",GET_ALL_INSTRUCTOR_COURSES_API,null,{
+      Authorization: `Bearer ${token}`
+    });
+    console.log("INSTRUCTOR COURSES API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Fetch Instructor Courses")
+    }
+    result = response?.data?.data;
+  }catch(error){
+    console.log("INSTRUCTOR COURSES API ERROR............", error)
+    toast.error(error.message)
+  }
+  toast.dismiss(toastId);
+  return result;
+}
