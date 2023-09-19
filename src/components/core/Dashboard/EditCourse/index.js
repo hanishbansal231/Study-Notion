@@ -4,39 +4,41 @@ import { useParams } from 'react-router-dom';
 import RenderSteps from '../AddCourse/RenderSteps';
 import { useEffect } from 'react';
 import { setCourse, setEditCourse } from '../../../../slices/courseSlice';
+import { getFullDetailsOfCourse } from '../../../../services/operations/courseDetailsAPI';
 export default function EditCourse() {
     const dispatch = useDispatch();
-    const {courseId} = useParams();
-    const {course} = useSelector((state) => state.course);
-    const {token} = useSelector((state) => state.auth);
-    const [loading,setLoading] = useState(false);
+    const { courseId } = useParams();
+    console.log("courseId", courseId)
+    const { course } = useSelector((state) => state.course);
+    console.log("course",course);
+    const { token } = useSelector((state) => state.auth);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
-        const populateCourseDetails = async () => {
-            setLoading(true);
-            const result = getFUllDetailsOfCourse(courseId,token);
-            if(result?.courseDetails){
-                dispatch(setEditCourse(true));
-                dispatch(setCourse(result?.courseDetails))
+        (async () => {
+            setLoading(true)
+            const result = await getFullDetailsOfCourse(courseId, token)
+            if (result?.courseDetails) {
+              dispatch(setEditCourse(true))
+              dispatch(setCourse(result?.courseDetails))
             }
-            setLoading(false);
-        }
-        populateCourseDetails();
-    })
-    if(loading){
-        return(
-            <div>
-                Loading...
+            setLoading(false)
+          })()
+    },[]);
+    if (loading) {
+        return (
+            <div className="grid flex-1 place-items-center">
+                <div className="spinner"></div>
             </div>
         )
     }
-  return (
-    <div>
-        <h2>Edit Course</h2>
+    return (
         <div>
-            {
-                course ? <RenderSteps /> : (<p>Course Not Found</p>)
-            }
+            <h2>Edit Course</h2>
+            <div>
+                {
+                    course ? <RenderSteps /> : (<p>Course Not Found</p>)
+                }
+            </div>
         </div>
-    </div>
-  )
+    )
 }

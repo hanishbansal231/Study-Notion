@@ -12,6 +12,7 @@ import ChipInput from './ChipInput';
 import Upload from '../Upload';
 import toast from 'react-hot-toast';
 import { COURSE_STATUS } from "../../../../../utils/constants"
+import { editCourseDetail } from '../../../../../services/operations/courseDetailsAPI';
 function CourseInformationForm() {
   const {
     register,
@@ -21,7 +22,7 @@ function CourseInformationForm() {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const {token} = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const { course, editCourse } = useSelector((state) => state.course);
   const [loading, setLoading] = useState(false);
   const [courseCategory, setCourseCategory] = useState([]);
@@ -72,7 +73,7 @@ function CourseInformationForm() {
   const onSubmit = async (data) => {
 
     if (editCourse) {
-    
+
       if (isFormUpdate()) {
         const currentValues = getValues()
         const formData = new FormData()
@@ -87,8 +88,8 @@ function CourseInformationForm() {
         if (currentValues.coursePrice !== course.price) {
           formData.append("price", data.coursePrice)
         }
-        if (currentValues.courseTags.toString() !== course.tag.toString()) {
-          formData.append("tag", JSON.stringify(data.courseTags))
+        if (currentValues.CouseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.CouseTags))
         }
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatYouWillLearn", data.courseBenefits)
@@ -97,12 +98,12 @@ function CourseInformationForm() {
           formData.append("category", data.courseCategory_.id)
         }
         if (
-          currentValues.courseRequirements.toString() !==
+          currentValues.courseRequirement.toString() !==
           course.instructions.toString()
         ) {
           formData.append(
             "instructions",
-            JSON.stringify(data.courseRequirements)
+            JSON.stringify(data.courseRequirement)
           )
         }
         if (currentValues.courseImage !== course.thumbnail) {
@@ -110,8 +111,7 @@ function CourseInformationForm() {
         }
         // console.log("Edit Form data: ", formData)
         setLoading(true)
-        // const result = await editCourseDetails(formData, token)
-        const result = false;
+        const result = await editCourseDetail(formData, token);
         setLoading(false)
         if (result) {
           dispatch(setStep(2))
@@ -132,10 +132,10 @@ function CourseInformationForm() {
     formData.append("status", COURSE_STATUS.DRAFT)
     formData.append("instructions", JSON.stringify(data.courseRequirement))
     formData.append("thumbnailImage", data.courseImage)
-    console.log("Data -> ",data);
+    console.log("Data -> ", data);
     setLoading(true)
     const result = await addCourseDetails(formData, token)
-    console.log("TOKEN CHECK ->",token);
+    console.log("TOKEN CHECK ->", token);
     if (result) {
       dispatch(setStep(2))
       dispatch(setCourse(result))
@@ -149,26 +149,26 @@ function CourseInformationForm() {
         <input className="form-style w-full" id='courseTitle' placeholder='Enter Course Title' {...register("courseTitle", { required: true })} />
         {
           errors.courseTitle && (
-            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Title is Required</span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Course Title is Required</span>
           )
         }
       </div>
       <div>
         <label className="text-sm text-richblack-5" htmlFor='courseShortDesc'>Course Short Description<sup className="text-pink-200">*</sup></label>
-        <textarea   className="form-style resize-x-none min-h-[130px] w-full" id="courseShortDesc" placeholder='Enter Description' {...register("courseShortDesc", { required: true })}></textarea>
+        <textarea className="form-style resize-x-none min-h-[130px] w-full" id="courseShortDesc" placeholder='Enter Description' {...register("courseShortDesc", { required: true })}></textarea>
         {
           errors.courseShortDesc && (
-            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Description is Required </span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Course Description is Required </span>
           )
         }
       </div>
       <div className='relative'>
         <label className="text-sm text-richblack-5" htmlFor='coursePrice'>Course Price<sup className="text-pink-200">*</sup></label>
-        <input id='coursePrice' placeholder='Enter Course Price' {...register("coursePrice", { required: true, valueAsNumber: true, })}    className="form-style w-full !pl-10" />
+        <input id='coursePrice' placeholder='Enter Course Price' {...register("coursePrice", { required: true, valueAsNumber: true, })} className="form-style w-full !pl-10" />
         <HiOutlineCurrencyRupee className="absolute left-3 top-[57px] inline-block -translate-y-1/2 text-2xl text-richblack-400" />
         {
           errors.coursePrice && (
-            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Price is Required</span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Course Price is Required</span>
           )
         }
       </div>
@@ -188,26 +188,26 @@ function CourseInformationForm() {
         </select>
         {
           errors.courseCategory && (
-            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Category is Required</span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Course Category is Required</span>
           )
         }
       </div>
-      <ChipInput 
-      label={"Tags"}
-      name="CouseTags"
-      placeholder="Enter tags and press enter"
-      register={register}
-      errors={errors}
-      getValues={getValues}
-      setValue={setValue}
+      <ChipInput
+        label={"Tags"}
+        name="CouseTags"
+        placeholder="Enter tags and press enter"
+        register={register}
+        errors={errors}
+        getValues={getValues}
+        setValue={setValue}
       />
-      <Upload 
-       name="courseImage"
-       label="Course Thumbnail"
-       register={register}
-       setValue={setValue}
-       errors={errors}
-       editData={editCourse ? course?.thumbnail : null}
+      <Upload
+        name="courseImage"
+        label="Course Thumbnail"
+        register={register}
+        setValue={setValue}
+        errors={errors}
+        editData={editCourse ? course?.thumbnail : null}
       />
       <div>
         <label className="text-sm text-richblack-5" htmlFor="coursebenifits">Benefits of the course<sup className="text-pink-200">*</sup></label>
@@ -219,7 +219,7 @@ function CourseInformationForm() {
         />
         {
           errors.courseBenefits && (
-            <span  className="ml-2 text-xs tracking-wide text-pink-200">Course Benefits is Required</span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Course Benefits is Required</span>
           )
         }
       </div>
