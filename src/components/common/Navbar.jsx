@@ -12,16 +12,6 @@ import { useEffect } from 'react';
 import { apiConnector } from '../../services/apiconnector';
 import { categories } from '../../services/apis';
 function Navbar() {
-    // const subLinks = [
-    //     {
-    //         title: "python",
-    //         link: "/catalog/python"
-    //     },
-    //     {
-    //         title: "web dev",
-    //         link: "/catalog/web-development"
-    //     }
-    // ]
     const { token } = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.profile);
     const { totalItems } = useSelector((state) => state.cart);
@@ -62,7 +52,7 @@ function Navbar() {
                                                             subLinks.length ? (
 
                                                                 subLinks.map((item, index) => (
-                                                                    <Link to={`${item.name.split("/").join("-").toLowerCase()}`} key={index}>
+                                                                    <Link to={`/catalog/${item.name.split(" ").join("-").toLowerCase()}`} key={index}>
                                                                         <p>{item.name}</p>
                                                                     </Link>
                                                                 ))

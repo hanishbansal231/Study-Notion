@@ -8,6 +8,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
 import VerifyEmail from './pages/VerifyEmail';
 import DashBoard from './pages/DashBoard';
+import Catalog from './pages/Catalog';
 import About from './pages/About';
 import Navbar from "./components/common/Navbar";
 import MyProfile from "./components/core/Dashboard/MyProfile";
@@ -26,6 +27,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={< Home />} />
+        <Route path="catalog/:catalogName" element={<Catalog/>} />
         <Route path="/signup" element={< Signup />} />
         <Route path="/login" element={< Login />} />
         <Route path="/forgot-password" element={< ForgotPassword />} />
