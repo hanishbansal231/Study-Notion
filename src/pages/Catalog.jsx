@@ -35,41 +35,51 @@ function Catalog() {
   }, [categoryId]);
   console.log(catalogPageData);
   return (
-    <div className='text-white'>
-
-      <div>
-        <p>
-          {`Home / Catalog / `}
-          <span>{catalogPageData?.data?.selectedCategory?.name}</span>
-        </p>
-        <p>{catalogPageData?.data?.selectedCategory?.name}</p>
-        <p>{catalogPageData?.data?.selectedCategory?.description}</p>
+    <>
+      <div className=" box-content bg-richblack-800 px-4">
+        <div className="mx-auto flex min-h-[260px] max-w-maxContentTab flex-col justify-center gap-4 lg:max-w-maxContent ">
+          <p className="text-sm text-richblack-300">
+            {`Home / Catalog / `}
+            <span className="text-yellow-25">{catalogPageData?.data?.selectedCategory?.name}</span>
+          </p>
+          <p className="text-3xl text-richblack-5">{catalogPageData?.data?.selectedCategory?.name}</p>
+          <p className="max-w-[870px] text-richblack-200">{catalogPageData?.data?.selectedCategory?.description}</p>
+        </div>
       </div>
-
       <div>
 
-        <div>
-          <div>Courses to get you started</div>
-          <div className='flex gap-x-3'>
-            <p>Most Popular</p>
-            <p>New</p>
+        <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
+          <div className="section_heading">Courses to get you started</div>
+          <div className="my-4 flex border-b border-b-richblack-600 text-sm">
+            <p className={`px-4 py-2 ${1 === 1
+              ? "border-b border-b-yellow-25 text-yellow-25"
+              : "text-richblack-50"
+              } cursor-pointer`}
+            // onClick={() => setActive(1)}
+            >Most Popular</p>
+            <p className={`px-4 py-2 ${1 === 2
+              ? "border-b border-b-yellow-25 text-yellow-25"
+              : "text-richblack-50"
+              } cursor-pointer`}
+            // onClick={() => setActive(2)}
+            >New</p>
           </div>
           <div>
             <CourseSlider courses={catalogPageData?.data?.selectedCategory?.courses} />
           </div>
         </div>
 
-        <div>
-          <p>Top Courses in {catalogPageData?.data?.selectedCategory?.name}</p>
-          <div>
+        <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
+          <p className="section_heading">Top Courses in {catalogPageData?.data?.selectedCategory?.name}</p>
+          <div className="py-8">
             <CourseSlider courses={catalogPageData?.data?.differentCategory?.courses} />
           </div>
         </div>
 
-        <div>
-          <p>Frequently Bought Together</p>
+        <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
+          <p className="section_heading">Frequently Bought Together</p>
           <div className='py-8'>
-            <div className='grid grid-cols-1 lg:grid-cols-2'>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               {
                 catalogPageData?.data?.mostSellingCourses?.slice(0, 4)
                   .map((course, index) => (
@@ -80,8 +90,7 @@ function Catalog() {
           </div>
         </div>
       </div>
-
-    </div>
+    </>
   )
 }
 

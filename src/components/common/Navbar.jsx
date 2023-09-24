@@ -71,14 +71,14 @@ function Navbar() {
                         }
                     </ul>
                 </nav>
-                <div className='flex gap-x-4 items-center'>
+                <div className='flex gap-x-5 items-center'>
                     {
                         user && user?.accountType !== "Instructor" && (
                             <Link to={"/dashboard/cart"} className='relative'>
                                 <AiOutlineShoppingCart className='text-richblack-25 text-2xl' />
                                 {
                                     totalItems > 0 && (
-                                        <span>{totalItems}</span>
+                                        <span  className="absolute -bottom-2 -right-2 grid h-5 w-5 place-items-center overflow-hidden rounded-full bg-richblack-600 text-center text-xs font-bold text-yellow-100">{totalItems}</span>
                                     )
                                 }
                             </Link>
